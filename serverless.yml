@@ -1,0 +1,66 @@
+org: your_org
+service: datadog-python-boto3-layer-test
+frameworkVersion: "4.5.1"
+
+dashboard:
+  disableMonitoring: true
+
+provider:
+  name: aws
+  runtime: python3.11
+  environment:
+    # Toggle this to see the issue with botocore dependencies.
+    DD_DATA_STREAMS_ENABLED: true
+
+functions:
+  hello:
+    handler: handler.hello
+
+plugins:
+  - serverless-python-requirements
+  - serverless-plugin-datadog
+
+custom:
+  pythonRequirements:
+    usePoetry: true
+    dockerizePip: true
+    dockerImage: public.ecr.aws/sam/build-python3.11:latest-x86_64
+    slim: true
+    strip: false
+    automatic: true
+    includeLayers: true
+    zip: true
+    useDownloadCache: false
+    useStaticCache: false
+  datadog:
+    enabled: true
+    site: datadoghq.eu
+    apiKey: ${env.DD_API_KEY}
+    service: boto3-python-layer-test
+    captureLambdaPayload: true
+    enableDDTracing: true
+    enableXrayTracing: true
+
+package:
+  individually: true
+  excludeDevDependencies: true
+  patterns:
+    - "!node_modules/**"
+    - "!.venv/**"
+    - "!tests/**"
+    - "!docs/**"
+    - "!notebooks/**"
+    - "!examples/**"
+    - "!.git/**"
+    - "!scripts/**"
+    - ".gitignore"
+    - "!.mypy_cache/**"
+    - "!.pytest_cache/**"
+    - "!.vscode/**"
+    - "!no_git/**"
+    - "!*__pycache__/**"
+    - "!venv/**"
+    - "!terraform/**"
+    - "!live/**"
+    - "!*modules/**"
+    - "!rb_streamlit/**"

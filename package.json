@@ -1,0 +1,11 @@
+{
+  "name": "datadog-python-boto3-layer-test",
+  "devDependencies": {
+    "serverless-plugin-datadog": "^5.76.0",
+    "serverless-python-requirements": "^6.1.1",
+    "serverless": "4.5.1"
+  },
+  "scripts": {
+    "deploy": "sls deploy"
+  }
+}
